@@ -662,7 +662,7 @@ static void rtlsdr_callback(unsigned char *iq_buf, uint32_t len, void *ctx) {
     }
 
 #ifndef _WIN32
-    alarm(3); // require callback to run every 3 second, abort otherwise
+    alarm(4); // require callback to run every 3 second, abort otherwise
 #endif
 
     if (demod->signal_grabber) {
@@ -805,7 +805,7 @@ static void rtlsdr_callback(unsigned char *iq_buf, uint32_t len, void *ctx) {
 #endif
 	  rtlsdr_cancel_async(dev);
 	}
-    if (duration > 0 && rawtime >= stop_time) {
+    if (duration > 2 && rawtime >= stop_time) {
         do_exit_async = do_exit = 1;
 #ifndef _WIN32
         alarm(0); // cancel the watchdog timer
@@ -1439,7 +1439,7 @@ int main(int argc, char **argv) {
                 fprintf(stderr, "Tuned to %u Hz.\n", rtlsdr_get_center_freq(dev));
 #ifndef _WIN32
             signal(SIGALRM, sighandler);
-            alarm(3); // require callback to run every 3 second, abort otherwise
+            alarm(4); // require callback to run every 3 second, abort otherwise
 #endif
             r = rtlsdr_read_async(dev, rtlsdr_callback, (void *) demod,
                     DEFAULT_ASYNC_BUF_NUMBER, out_block_size);
